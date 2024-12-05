@@ -6,7 +6,7 @@
 /*   By: smayti <smayti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 14:25:45 by smayti            #+#    #+#             */
-/*   Updated: 2024/12/03 14:27:18 by smayti           ###   ########.fr       */
+/*   Updated: 2024/12/05 15:58:45 by smayti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-int	ft_printf_arg(va_list args, const char format)
+static int	ft_printf_arg(va_list args, const char format)
 {
 	if (format == 'c')
 		return (ft_putchar(va_arg(args, int)));
@@ -30,9 +30,9 @@ int	ft_printf_arg(va_list args, const char format)
 		return (ft_put_hexadecimal_up(va_arg(args, unsigned int)));
 	else if (format == '%')
 		return (ft_putchar('%'));
-    else if (format == 'p')
+	else if (format == 'p')
 		return (ft_put_pointer(va_arg(args, unsigned long long)));
-	return (0);
+	return (-1);
 }
 
 int	ft_printf(const char *format, ...)
@@ -40,21 +40,24 @@ int	ft_printf(const char *format, ...)
 	va_list	args;
 	size_t	i;
 	int		length;
+	int		tmp;
 
 	if (!format)
 		return (-1);
 	i = 0;
 	length = 0;
+	tmp = 0;
 	va_start(args, format);
 	while (format[i])
 	{
 		if (format[i] == '%')
-		{
-			length += ft_printf_arg(args, format[i + 1]);
-			i++;
-		}
+			tmp = ft_printf_arg(args, format[++i]);
 		else
-			length += ft_putchar(format[i]);
+			tmp = ft_putchar(format[i]);
+		if (tmp == -1)
+			return (-1);
+		else
+			length += tmp;
 		i++;
 	}
 	va_end(args);

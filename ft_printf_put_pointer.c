@@ -1,55 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_char_func.c                              :+:      :+:    :+:   */
+/*   ft_printf_put_pointer.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smayti <smayti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/03 14:25:23 by smayti            #+#    #+#             */
-/*   Updated: 2024/12/04 17:39:45 by smayti           ###   ########.fr       */
+/*   Created: 2024/12/04 16:17:23 by smayti            #+#    #+#             */
+/*   Updated: 2024/12/04 19:05:55 by smayti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include <unistd.h>
 
-int	ft_putchar(int c)
+static int	ft_put_pointer_hexa(unsigned long int n)
 {
-	if (write(1, &c, 1) == -1)
-		return (-1);
-	return (1);
-}
+	char	*hexa_case;
+	int		len;
+    int     tmp;
 
-static int	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0')
+	len = 0;
+	hexa_case = "0123456789abcdef";
+	if (n > 15)
 	{
-		i++;
+		len += ft_put_pointer_hexa((n / 16));
 	}
-	return (i);
+	tmp = (ft_putchar(hexa_case[(n % 16)]));
+	if (tmp == -1)
+		return (-1);
+    len += tmp;
+	return (len);
 }
 
-int	ft_putstr(char *str)
+int	ft_put_pointer(unsigned long long ptr)
 {
-	int	i;
 	int	len;
 
-	i = 0;
-	if (str == 0)
+	if (ptr == 0)
 	{
-		if (write(1, "(null)", 6) == -1)
+		len = write(1, "(nil)", 5);
+		if (len == -1)
 			return (-1);
-		return (6);
+		return (len);
 	}
-	while (str[i] != '\0')
-	{
-		if (write(1, &str[i], 1) == -1)
-			return (-1);
-		i++;
-	}
-	len = ft_strlen(str);
+	len = write(1, "0x", 2);
+	if (len == -1)
+		return (-1);
+	len += ft_put_pointer_hexa(ptr);
 	return (len);
 }

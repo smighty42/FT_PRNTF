@@ -1,10 +1,11 @@
-NAME = libftprintf.a
 
+NAME = libftprintf.a
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 AR = ar rcs
 
-SRCS = ft_printf.c ft_printf_char_func.c ft_printf_nbr_func.c ft_put_hexa.c\
+SRCS = ft_printf.c ft_printf_char_func.c ft_printf_nbr_func.c ft_put_hexa.c ft_printf_put_pointer.c
 
 OBJS = $(SRCS:.c=.o)
 
